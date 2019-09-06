@@ -1,11 +1,12 @@
 '''Tracks the season perfomance of different teams and generates a
 '''
-from possible_values import *
+from possible_values import team_names
 from game import Game
 from random import randint, uniform, sample
+from itertools import combinations
 
 
-def generate_rand_games(n=15):
+def generate_rand_games(n=16):
     '''Generate n random games using value lists in possible_values
     '''
     # Begin with enpty list
@@ -14,9 +15,9 @@ def generate_rand_games(n=15):
     # For the specified number of games, create an instance of the Game
     # class...
     # TODO - You can also include the location and week number if desired
-    for _ in list(range(n)):
         # Get team names by sampling team_names from possible_values
-        game = Game(teams=sample(team_names, k=2))
+    for matchup in combinations(team_names, 2):
+        game = Game(teams=matchup)
 
         # Give each team a random number (from 0 to 3) of each:
         # touchdowns and field goals
@@ -31,6 +32,12 @@ def generate_rand_games(n=15):
 
         for l in list(range(randint(0, 4))):
             game.touchdown(game.teams[1])
+
+        for m in list(range(randint(0, 4))):
+            game.safety(game.teams[0])
+
+        for p in list(range(randint(0, 4))):
+            game.safety(game.teams[1])
 
         games.append(game)
     return games
@@ -69,9 +76,9 @@ def season_report(games):
     # Calculates the average points scored by winning team and losing team
     # in a game
     winning_team_average = (winning_team_total_points /
-                            len(winning_team))
+                            len(winning_teams))
     losing_team_average = (losing_team_total_points /
-                           len(losing_team))
+                           len(losing_teams))
 
     # Instantiate dict to keep track of individual team records
     team_records = {}
